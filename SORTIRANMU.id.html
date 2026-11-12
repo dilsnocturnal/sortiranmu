@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>SORTIRANMU.ID – Sortir Foto Cepat untuk Fotografer</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f1f1f3;--card:#fafafa;--ink:#1c1c1f;--mut:#6b6b73;--p1:#e4e4e8;--p2:#d9dadf;--p3:#cfd0d6;--p4:#e9e9ec;--p5:#dcdce0;--ac:#1c1c1f;--ac2:#55555d;--onac:#f4f4f6;--line:#dcdce0;--sh:0 8px 24px rgba(28,28,31,.15);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Poppins,system-ui,sans-serif;line-height:1.55;min-height:100vh}
+.hide{display:none!important}
+.wrap{max-width:1100px;margin:0 auto;padding:0 20px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0}
+.logo{font-weight:800;font-size:1.2rem;letter-spacing:.5px}.logo span{color:var(--ac2)}
+/* buttons */
+.btn{position:relative;overflow:hidden;border:0;cursor:pointer;font:inherit;font-weight:800;padding:12px 22px;border-radius:999px;background:var(--p3);color:var(--ink);box-shadow:0 3px 0 rgba(0,0,0,.08);transition:transform .18s cubic-bezier(.3,1.6,.5,1),box-shadow .18s,background .2s}
+.btn::after{content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.55),transparent);transform:skewX(-20deg);transition:left .5s}
+.btn:hover{transform:translateY(-3px) scale(1.03);box-shadow:var(--sh)}.btn:hover::after{left:130%}
+.btn:active{transform:translateY(1px) scale(.94);box-shadow:none}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}.btn:disabled::after{display:none}
+.btn.pri{background:var(--ac);color:var(--onac)}.btn.mint{background:var(--p2)}.btn.peach{background:var(--p1)}.btn.sky{background:var(--p4)}.btn.sun{background:var(--p5)}
+.btn.big{padding:16px 34px;font-size:1.1rem}
+.btn:focus-visible{outline:3px solid var(--ac2);outline-offset:2px}
+/* landing */
+.hero{text-align:center;padding:60px 0 50px;position:relative}
+.blob{position:absolute;border-radius:50%;filter:blur(40px);opacity:.8;z-index:-1;animation:fl 9s ease-in-out infinite}
+.b1{width:260px;height:260px;background:var(--p1);left:2%;top:10px}.b2{width:300px;height:300px;background:var(--p3);right:0;top:60px;animation-delay:-3s}.b3{width:200px;height:200px;background:var(--p2);left:40%;bottom:-40px;animation-delay:-6s}
+@keyframes fl{50%{transform:translateY(24px) scale(1.06)}}
+h1{font-size:clamp(2rem,6vw,3.6rem);line-height:1.15;margin:0 0 14px;font-weight:800}
+h1 em{font-style:normal;background:linear-gradient(transparent 60%,var(--p5) 60%)}
+.hero p{max-width:600px;margin:0 auto 28px;color:var(--mut);font-size:1.1rem}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin:20px 0 50px}
+.card{background:var(--card);border-radius:22px;padding:22px;box-shadow:var(--sh);border:1px solid var(--line)}
+.card h3{margin:8px 0 6px}.card p{margin:0;color:var(--mut)}
+.ico{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;font-size:1.6rem}
+h2{text-align:center;font-size:1.8rem;margin:10px 0 18px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-bottom:50px}
+.step{border-radius:22px;padding:20px}.step b{font-size:1.8rem;display:block}
+footer{text-align:center;color:var(--mut);padding:26px 0 40px;font-size:.9rem}
+/* app */
+.top{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between;padding:14px 0}
+.setup{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;margin:16px 0}
+.setup .card{text-align:center}.setup .card .btn{margin:12px 4px 6px}
+.info{color:var(--mut);font-size:.95rem;min-height:1.5em}
+.tag{display:inline-block;padding:3px 12px;border-radius:99px;font-size:.85rem;font-weight:800;background:var(--p2)}
+.sorter{display:grid;grid-template-columns:1fr 290px;gap:16px}
+@media(max-width:820px){.sorter{grid-template-columns:1fr}}
+.stage{position:relative;height:62vh;min-height:320px;background:#1c1c1f;border-radius:22px;overflow:hidden;box-shadow:var(--sh);touch-action:none;cursor:grab}
+.stage img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transform-origin:center;user-select:none;-webkit-user-drag:none;will-change:transform}
+.badge{position:absolute;top:12px;padding:6px 14px;border-radius:99px;font-weight:800;font-size:.9rem;z-index:2}
+.bsel{left:12px;background:var(--p2);color:#1c1c1f;transform:scale(0);transition:transform .25s cubic-bezier(.3,1.8,.5,1)}.stage.sel .bsel{transform:scale(1)}
+.stage.sel{outline:4px solid var(--p2);outline-offset:-4px}
+.braw{right:12px;background:var(--p5);color:#1c1c1f}
+.zoomlbl{position:absolute;bottom:10px;left:12px;background:rgba(0,0,0,.5);color:#fff;padding:2px 10px;border-radius:99px;font-size:.8rem}
+.bar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.side .card{padding:16px}.side h4{margin:0 0 8px}
+dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:5px 12px;font-size:.9rem}dt{color:var(--mut)}dd{margin:0;font-weight:600;word-break:break-word;text-align:right}
+.stats{display:flex;gap:8px;margin-bottom:12px}.stats div{flex:1;border-radius:16px;padding:10px;text-align:center;font-weight:800}.stats small{display:block;font-weight:600;color:var(--mut)}
+.modal{position:fixed;inset:0;background:rgba(20,20,24,.5);display:grid;place-items:center;z-index:50;padding:20px}
+.modal .card{max-width:440px;width:100%}
+.krow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px dashed var(--line)}
+kbd{background:var(--p3);border-radius:8px;padding:4px 14px;font:inherit;font-weight:800;min-width:60px;display:inline-block;text-align:center}
+.prog{height:12px;border-radius:99px;background:var(--line);overflow:hidden;margin:14px 0}.prog i{display:block;height:100%;width:0;background:var(--ac);transition:width .2s}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--bg);padding:10px 20px;border-radius:99px;font-weight:700;transition:transform .3s;z-index:60}.toast.on{transform:translateX(-50%)}
+label.chk{display:flex;gap:8px;align-items:center;font-weight:600;cursor:pointer}
+#landing{background:linear-gradient(180deg,#f6f6f8 0%,#dcdce0 60%,#c5c6cc 100%);min-height:100vh}
+#landing .hero{padding:90px 0 60px}
+#landing h1{font-weight:700}
+#landing .card{background:rgba(255,255,255,.55);border:0;box-shadow:none}
+#landing .ico{background:rgba(255,255,255,.7)!important}
+#landing footer{padding-top:10px}
+.card{transition:transform .28s cubic-bezier(.3,1.4,.5,1),box-shadow .28s,background .28s,border-color .28s}
+.card:hover{transform:translateY(-8px);box-shadow:0 16px 32px rgba(28,28,31,.22);border-color:var(--mut)}
+#landing .card:hover{background:rgba(255,255,255,.9)}
+.modal .card:hover{transform:none;box-shadow:var(--sh)}
+.stats div{transition:transform .22s cubic-bezier(.3,1.6,.5,1)}.stats div:hover{transform:translateY(-4px) scale(1.04)}
+@media (prefers-reduced-motion:reduce){.card,.stats div{transition:none}.card:hover,.stats div:hover{transform:none}}
+</style></head><body>
+
+<!-- LANDING -->
+<div id="landing"><div class="wrap">
+<nav><div class="logo">SORTIRANMU<span>.ID</span></div><button class="btn pri" data-go>Mulai Sortir</button></nav>
+<section class="hero">
+<h1>Sortir ribuan foto,<br><em>cukup sekali jalan.</em></h1>
+<p>Lihat JPG, pilih dengan satu tombol, dan file RAW pasangannya ikut tersalin otomatis ke folder tujuan. File aslimu tidak pernah diubah.</p>
+<button class="btn pri big" data-go>Mulai Menyortir</button></section>
+<div class="grid3">
+<div class="card"><h3>Cepat dengan keyboard</h3><p>Geser, pilih, dan urungkan tanpa menyentuh mouse. Tombol bisa kamu atur sendiri.</p></div>
+<div class="card"><h3>RAW ikut otomatis</h3><p>Hanya JPG yang tampil. Saat selesai, RAW dengan nama sama ikut disalin.</p></div>
+<div class="card"><h3>Zoom &amp; data EXIF</h3><p>Periksa ketajaman dengan zoom, lalu lihat kamera, lensa, ISO, rana, dan diafragma.</p></div></div>
+<footer>© SORTIRANMU.ID · File diproses langsung di browsermu, tidak ada yang diunggah.</footer>
+</div></div>
+
+<!-- SETUP -->
+<div id="setup" class="hide"><div class="wrap">
+<div class="top"><div class="logo">SORTIRANMU<span>.ID</span></div><button class="btn" id="back1">Beranda</button></div>
+<div class="setup">
+<div class="card"><h3>1. Folder sumber</h3><button class="btn peach" id="pSrc">Unggah Folder Foto</button><input type="file" id="fIn" webkitdirectory multiple hidden><div class="info" id="iSrc">Belum dipilih</div></div>
+<div class="card"><h3>2. Folder tujuan</h3><button class="btn mint" id="pDst">Pilih Folder Tujuan</button><button class="btn" id="pZip">Unduh sebagai ZIP</button><div class="info" id="iDst">Belum dipilih</div></div></div>
+<div style="text-align:center;margin:20px 0"><button class="btn pri big" id="start" disabled>Mulai Menyortir</button>
+<p class="info" id="warn"></p></div></div></div>
+
+<!-- SORTER -->
+<div id="sorter" class="hide"><div class="wrap">
+<div class="top"><div><b id="name">-</b> <span class="tag" id="cnt">0/0</span></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn sun" id="kbBtn">Shortcut</button><button class="btn" id="back2">Ganti Folder</button><button class="btn pri" id="finish">Selesai &amp; Salin</button></div></div>
+<div class="sorter"><div>
+<div class="stage" id="stage"><span class="badge bsel">Terpilih</span><span class="badge braw hide" id="rawb">+ RAW</span><img id="img" alt="Foto"><span class="zoomlbl" id="zl">100%</span></div>
+<div class="bar">
+<button class="btn sky" id="bPrev">Sebelumnya <span class="k" data-k="prev"></span></button>
+<button class="btn mint" id="bPick">Pilih <span class="k" data-k="pick"></span></button>
+<button class="btn peach" id="bUndo">Urungkan <span class="k" data-k="undo"></span></button>
+<button class="btn sky" id="bNext">Berikutnya <span class="k" data-k="next"></span></button>
+<button class="btn" id="zOut">Perkecil</button><button class="btn" id="zRst">100%</button><button class="btn" id="zIn">Perbesar</button></div>
+<label class="chk" style="justify-content:center;margin-top:12px"><input type="checkbox" id="auto" checked> Lanjut otomatis setelah memilih</label></div>
+<div class="side"><div class="stats"><div style="background:var(--p2)" id="sSel">0<small>Terpilih</small></div><div style="background:var(--p5)" id="sRaw">0<small>RAW ikut</small></div></div>
+<div class="card"><h4>Data EXIF</h4><dl id="exif"></dl></div></div></div>
+</div></div>
+
+<!-- MODALS -->
+<div class="modal hide" id="mKb"><div class="card"><h3>Atur Shortcut</h3><p class="info">Klik tombol, lalu tekan tombol keyboard baru. Esc untuk batal.</p><div id="kList"></div>
+<p class="info">Zoom: scroll mouse, geser untuk pan, klik dua kali untuk reset.</p>
+<div style="display:flex;gap:8px;justify-content:space-between"><button class="btn peach" id="kReset">Reset default</button><button class="btn pri" id="kClose">Tutup</button></div></div></div>
+<div class="modal hide" id="mFin"><div class="card"><h3>Salin hasil sortiran</h3><p id="finTxt"></p><div class="prog"><i id="bar"></i></div><p class="info" id="finSt">File di folder sumber tidak akan diubah (hanya disalin).</p>
+<div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" id="finClose">Kembali</button><button class="btn pri" id="doCopy">Salin Sekarang</button></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>document.querySelectorAll(s);
+const RAW=/\.(arw|cr2|cr3|nef|nrw|raf|orf|rw2|dng|pef|srw|raw|3fr|erf|kdc|mrw)$/i,JPG=/\.jpe?g$/i,base=n=>n.replace(/\.[^.]+$/,'').toLowerCase();
+const DEF={prev:'q',next:'e',pick:' ',undo:'z'},LBL={prev:'Gulir kiri',next:'Gulir kanan',pick:'Pilih',undo:'Urungkan'};
+let keys={...DEF};try{Object.assign(keys,JSON.parse(localStorage.getItem('sortiranmu-keys')||'{}'))}catch(e){}
+let src,dst,files=[],raws=new Map(),sel=new Set(),hist=[],cur=0,z=1,tx=0,ty=0,url=null,tok=0,rebind=null;
+const kn=k=>k===' '?'Spasi':k.length===1?k.toUpperCase():k;
+function paintKeys(){$$('.k').forEach(e=>e.textContent=kn(keys[e.dataset.k]));
+ $('#kList').innerHTML=Object.keys(LBL).map(a=>`<div class="krow"><span>${LBL[a]}</span><button class="btn" data-a="${a}"><kbd>${kn(keys[a])}</kbd></button></div>`).join('')}
+function view(id){['landing','setup','sorter'].forEach(v=>$('#'+v).classList.toggle('hide',v!==id));scrollTo(0,0)}
+function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('on'),1400)}
+$$('[data-go]').forEach(b=>b.onclick=()=>view('setup'));
+$('#back1').onclick=()=>view('landing');$('#back2').onclick=()=>view('setup');
+
+async function pick(mode){
+ if(!window.showDirectoryPicker){alert('Browser kamu belum mendukung pemilihan folder. Gunakan Chrome atau Edge di komputer.');return null}
+ try{return await showDirectoryPicker({mode})}catch(e){if(e.name!=='AbortError')alert('Folder tidak bisa dibuka: '+e.message+'\nJika halaman ini tertanam di dalam frame, buka di tab baru.');return null}}
+async function scan(list){
+ files=[];raws=new Map();
+ for(const {n,h} of list){
+  if(JPG.test(n))files.push({n,h});else if(RAW.test(n)){const b=base(n);(raws.get(b)||raws.set(b,[]).get(b)).push({n,h})}}
+ files.sort((a,b)=>a.n.localeCompare(b.n,undefined,{numeric:true}));
+ const m=files.filter(f=>raws.has(base(f.n))).length;
+ $('#iSrc').innerHTML=`<b>${src.name}</b><br>${files.length} JPG · ${m} punya pasangan RAW`;
+ chk()}
+function chk(){const ok=src&&dst&&files.length>0;$('#start').disabled=!ok;
+ $('#warn').textContent=src&&!files.length?'Tidak ada file JPG di folder ini.':src&&dst&&src.name===dst.name?'Pastikan folder tujuan berbeda dari folder sumber.':''}
+$('#pSrc').onclick=async()=>{if(fsOK){try{const h=await showDirectoryPicker({mode:'read'});const list=[];for await(const [n,x] of h.entries())if(x.kind==='file')list.push({n,h:x});src=h;return await scan(list)}catch(e){if(e.name==='AbortError')return}}$('#fIn').click()};
+$('#fIn').onchange=async e=>{const fl=[...e.target.files];if(!fl.length)return;
+ const nm=(fl[0].webkitRelativePath||'').split('/')[0]||'Folder';src={name:nm};
+ await scan(fl.filter(f=>!f.webkitRelativePath||f.webkitRelativePath.split('/').length===2).map(f=>({n:f.name,h:{getFile:async()=>f}})));e.target.value=''};
+let fsOK=!!window.showDirectoryPicker;
+function setZip(){dst={zip:true,name:'ZIP'};$('#iDst').innerHTML='<b>Hasil diunduh sebagai file ZIP</b>';chk()}
+$('#pDst').onclick=async()=>{try{const h=await showDirectoryPicker({mode:'readwrite'});dst=h;$('#iDst').innerHTML=`<b>${h.name}</b>`;chk()}catch(e){if(e.name==='AbortError')return;if(window.self===window.top){$('#iDst').innerHTML='<b>Folder ditolak browser</b><br>'+(e.name==='SecurityError'?'Folder sistem (Desktop, Documents, Downloads) tidak boleh dipilih langsung. Buat subfolder baru di dalamnya, lalu pilih subfolder itu.':'Izin akses folder belum diberikan. Klik lagi dan pilih Izinkan.');return}$('#pDst').classList.add('hide');setZip();$('#iDst').innerHTML='<b>ZIP</b><br>Browser memblokir akses langsung ke folder di halaman ini. Unduh file HTML-nya lalu buka di Chrome atau Edge agar hasil langsung masuk ke folder.'}};
+$('#pZip').onclick=setZip;
+if(!fsOK){$('#pDst').classList.add('hide');$('#pZip').classList.add('hide');setZip();$('#iDst').innerHTML='<b>ZIP</b><br>Browser ini tidak bisa menulis langsung ke folder, jadi hasil sortiran diunduh sebagai file ZIP.'}
+$('#start').onclick=()=>{sel=new Set();hist=[];cur=0;view('sorter');show()};
+
+/* EXIF */
+function exif(buf){const v=new DataView(buf),o={};if(v.byteLength<4||v.getUint16(0)!==0xFFD8)return o;let p=2;
+ while(p<v.byteLength-10){const m=v.getUint16(p);if((m&0xFF00)!==0xFF00)break;
+  if(m===0xFFE1&&v.getUint32(p+4)===0x45786966){tiff(v,p+10,o);break}p+=2+v.getUint16(p+2)}return o}
+function tiff(v,s,o){const le=v.getUint16(s)===0x4949,g16=p=>v.getUint16(p,le),g32=p=>v.getUint32(p,le),sz={1:1,2:1,3:2,4:4,5:8,7:1,10:8};
+ function ifd(off){const out={};try{const n=g16(s+off);for(let i=0;i<n;i++){const p=s+off+2+i*12,t=g16(p),ty=g16(p+2),c=g32(p+4),tot=(sz[ty]||1)*c,vp=tot>4?s+g32(p+8):p+8;let val;
+  if(ty===2){val='';for(let j=0;j<c-1;j++)val+=String.fromCharCode(v.getUint8(vp+j))}
+  else if(ty===3)val=g16(vp);else if(ty===4)val=g32(vp);else if(ty===5)val=g32(vp)/g32(vp+4);else if(ty===10)val=v.getInt32(vp,le)/v.getInt32(vp+4,le);else continue;
+  out[t]=typeof val==='string'?val.trim():val}}catch(e){}return out}
+ const a=ifd(g32(s+4)),b=a[0x8769]?ifd(a[0x8769]):{};Object.assign(o,{make:a[0x10F],model:a[0x110],t:b[0x829A],f:b[0x829D],iso:b[0x8827],date:b[0x9003],fl:b[0x920A],lens:b[0xA434]})}
+async function showExif(file,img){let o={};try{o=exif(await file.slice(0,131072).arrayBuffer())}catch(e){}
+ const t=o.t?(o.t<1?'1/'+Math.round(1/o.t)+' dtk':o.t+' dtk'):'-',row=(k,v)=>`<dt>${k}</dt><dd>${v||'-'}</dd>`;
+ $('#exif').innerHTML=row('Kamera',[o.make,o.model].filter(Boolean).join(' '))+row('Lensa',o.lens)+row('Rana',t)+row('Diafragma',o.f?'f/'+(+o.f.toFixed(1)):'')+row('ISO',o.iso)+row('Focal length',o.fl?Math.round(o.fl)+' mm':'')+row('Tanggal',o.date)+row('Resolusi',img.naturalWidth?img.naturalWidth+' × '+img.naturalHeight:'')+row('Ukuran',(file.size/1048576).toFixed(1)+' MB')}
+
+/* viewer */
+const img=$('#img'),stage=$('#stage');
+function tf(){img.style.transform=`translate(${tx}px,${ty}px) scale(${z})`;$('#zl').textContent=Math.round(z*100)+'%'}
+function zoom(f){z=Math.min(10,Math.max(1,z*f));if(z===1){tx=ty=0}tf()}
+function reset(){z=1;tx=ty=0;tf()}
+async function show(){if(!files.length)return;const my=++tok,f=files[cur];
+ let file;try{file=await f.h.getFile()}catch(e){toast('Gagal membaca file');return}if(my!==tok)return;
+ if(url)URL.revokeObjectURL(url);url=URL.createObjectURL(file);reset();img.src=url;
+ $('#name').textContent=f.n;$('#cnt').textContent=(cur+1)+' / '+files.length;
+ stage.classList.toggle('sel',sel.has(f.n));$('#rawb').classList.toggle('hide',!raws.has(base(f.n)));stats();
+ img.onload=()=>showExif(file,img)}
+function stats(){let r=0;sel.forEach(n=>{if(raws.has(base(n)))r+=raws.get(base(n)).length});
+ $('#sSel').firstChild.nodeValue=sel.size;$('#sRaw').firstChild.nodeValue=r}
+function go(d){const n=cur+d;if(n<0||n>=files.length)return toast(n<0?'Ini foto pertama':'Ini foto terakhir');cur=n;show()}
+function toggle(){const n=files[cur].n;sel.has(n)?sel.delete(n):sel.add(n);hist.push(cur);
+ if($('#auto').checked&&cur<files.length-1){cur++;stats();show()}else{stage.classList.toggle('sel',sel.has(n));stats()}}
+function undo(){if(!hist.length)return toast('Tidak ada yang diurungkan');cur=hist.pop();const n=files[cur].n;sel.has(n)?sel.delete(n):sel.add(n);toast('Diurungkan: '+n);show()}
+$('#bPrev').onclick=()=>go(-1);$('#bNext').onclick=()=>go(1);$('#bPick').onclick=toggle;$('#bUndo').onclick=undo;
+$('#zIn').onclick=()=>zoom(1.4);$('#zOut').onclick=()=>zoom(1/1.4);$('#zRst').onclick=reset;stage.ondblclick=reset;
+stage.addEventListener('wheel',e=>{e.preventDefault();zoom(Math.exp(-e.deltaY*.0015))},{passive:false});
+let drag=null;stage.onpointerdown=e=>{if(z>1){drag={x:e.clientX-tx,y:e.clientY-ty};stage.setPointerCapture(e.pointerId);stage.style.cursor='grabbing'}};
+stage.onpointermove=e=>{if(drag){tx=e.clientX-drag.x;ty=e.clientY-drag.y;tf()}};
+stage.onpointerup=()=>{drag=null;stage.style.cursor='grab'};
+
+/* shortcuts */
+addEventListener('keydown',e=>{
+ if(rebind){e.preventDefault();if(e.key!=='Escape'&&!['Shift','Control','Alt','Meta'].includes(e.key)){const k=e.key.length===1?e.key.toLowerCase():e.key;
+  const dup=Object.keys(keys).find(a=>keys[a]===k&&a!==rebind);if(dup)keys[dup]=keys[rebind];keys[rebind]=k;try{localStorage.setItem('sortiranmu-keys',JSON.stringify(keys))}catch(x){}}
+  rebind=null;paintKeys();return}
+ if($('#sorter').classList.contains('hide')||!$('#mKb').classList.contains('hide')||!$('#mFin').classList.contains('hide'))return;
+ if(/INPUT|TEXTAREA/.test(e.target.tagName)&&e.target.type!=='checkbox')return;
+ const k=e.key.length===1?e.key.toLowerCase():e.key,a=Object.keys(keys).find(x=>keys[x]===k);
+ if(a){e.preventDefault();if(e.repeat&&a==='pick')return;({prev:()=>go(-1),next:()=>go(1),pick:toggle,undo:undo})[a]()}
+ else if(k==='+'||k==='=')zoom(1.4);else if(k==='-')zoom(1/1.4);else if(k==='0')reset()});
+$('#kBtn')||0;$('#kbBtn').onclick=()=>{paintKeys();$('#mKb').classList.remove('hide')};
+$('#kClose').onclick=()=>{rebind=null;$('#mKb').classList.add('hide')};
+$('#kReset').onclick=()=>{keys={...DEF};try{localStorage.removeItem('sortiranmu-keys')}catch(e){}paintKeys()};
+$('#kList').onclick=e=>{const b=e.target.closest('button');if(!b)return;rebind=b.dataset.a;b.innerHTML='<kbd>Tekan tombol…</kbd>'};
+
+/* finish & copy (COPY only, source never modified) */
+/* ZIP tanpa kompresi (JPG/RAW sudah terkompresi), dipecah tiap ~3,5 GB */
+const CT=(()=>{const t=new Uint32Array(256);for(let i=0;i<256;i++){let c=i;for(let k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[i]=c>>>0}return t})();
+function crc(u,c){for(let i=0;i<u.length;i++)c=CT[(c^u[i])&255]^(c>>>8);return c}
+async function makeZip(items,onp){const enc=new TextEncoder(),bl=[],cd=[];let off=0;
+ const d=new Date(),tm=(d.getHours()<<11)|(d.getMinutes()<<5)|(d.getSeconds()>>1),dt=((d.getFullYear()-1980)<<9)|((d.getMonth()+1)<<5)|d.getDate();
+ for(const {n,f} of items){const nm=enc.encode(n);let c=0xFFFFFFFF;
+  for(let o=0;o<f.size;o+=8388608)c=crc(new Uint8Array(await f.slice(o,o+8388608).arrayBuffer()),c);c=(c^0xFFFFFFFF)>>>0;
+  const L=new DataView(new ArrayBuffer(30));L.setUint32(0,0x04034b50,true);L.setUint16(4,20,true);L.setUint16(6,0x800,true);L.setUint16(10,tm,true);L.setUint16(12,dt,true);L.setUint32(14,c,true);L.setUint32(18,f.size,true);L.setUint32(22,f.size,true);L.setUint16(26,nm.length,true);
+  bl.push(L.buffer,nm,f);
+  const C=new DataView(new ArrayBuffer(46));C.setUint32(0,0x02014b50,true);C.setUint16(4,20,true);C.setUint16(6,20,true);C.setUint16(8,0x800,true);C.setUint16(12,tm,true);C.setUint16(14,dt,true);C.setUint32(16,c,true);C.setUint32(20,f.size,true);C.setUint32(24,f.size,true);C.setUint16(28,nm.length,true);C.setUint32(42,off,true);cd.push(C.buffer,nm);
+  off+=30+nm.length+f.size;onp&&onp()}
+ let cs=0;cd.forEach(x=>cs+=x.byteLength);
+ const E=new DataView(new ArrayBuffer(22));E.setUint32(0,0x06054b50,true);E.setUint16(8,items.length,true);E.setUint16(10,items.length,true);E.setUint32(12,cs,true);E.setUint32(16,off,true);
+ return new Blob([...bl,...cd,E.buffer],{type:'application/zip'})}
+async function saveBlob(blob,name){let d=null;try{d=window.claude&&await claude.use('downloads')}catch(e){}
+ if(d)return d.save({filename:name,data:blob});
+ const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),60000)}
+async function zipOut(l){const b=$('#doCopy');b.disabled=true;
+ try{const items=[];for(const it of l)items.push({n:it.n,f:await it.h.getFile()});
+  const parts=[];let c=[],s=0;for(const x of items){if(s+x.f.size>3.5e9&&c.length){parts.push(c);c=[];s=0}c.push(x);s+=x.f.size}if(c.length)parts.push(c);
+  let done=0;
+  for(let p=0;p<parts.length;p++){$('#finSt').textContent=`Menyiapkan ZIP ${p+1} / ${parts.length}…`;
+   const blob=await makeZip(parts[p],()=>{done++;$('#bar').style.width=Math.round(done/items.length*100)+'%'});
+   await saveBlob(blob,'SORTIRANMU-'+(parts.length>1?'bagian-'+(p+1):'hasil')+'.zip')}
+  $('#finSt').textContent=`Selesai! ${items.length} file dimasukkan ke ${parts.length} ZIP.`}
+ catch(e){$('#finSt').textContent=e&&e.code==='declined'?'Unduhan dibatalkan.':'Unduhan gagal: '+((e&&e.message)||'tidak diketahui')}
+ b.disabled=false}
+function plan(){const list=[];files.filter(f=>sel.has(f.n)).forEach(f=>{list.push(f);(raws.get(base(f.n))||[]).forEach(r=>list.push(r))});return list}
+$('#finish').onclick=()=>{const l=plan(),r=l.length-sel.size;$('#finTxt').textContent=`${sel.size} JPG + ${r} RAW akan ${dst.zip?'diunduh sebagai file ZIP':'disalin ke folder “'+dst.name+'”'}.`;
+ $('#bar').style.width='0';$('#finSt').textContent='File di folder sumber tidak akan diubah (hanya disalin).';$('#doCopy').disabled=!sel.size;$('#doCopy').textContent=dst.zip?'Unduh ZIP':'Salin Sekarang';$('#mFin').classList.remove('hide')};
+$('#finClose').onclick=()=>$('#mFin').classList.add('hide');
+$('#doCopy').onclick=async()=>{const l=plan();if(!l.length)return;if(dst.zip)return zipOut(l);const b=$('#doCopy');b.disabled=true;let ok=0,skip=0,fail=0;
+ for(let i=0;i<l.length;i++){const it=l[i];try{let exists=true;try{await dst.getFileHandle(it.n)}catch(e){exists=false}
+  if(exists)skip++;else{const file=await it.h.getFile(),w=await(await dst.getFileHandle(it.n,{create:true})).createWritable();await w.write(file);await w.close();ok++}}catch(e){fail++}
+  $('#bar').style.width=Math.round((i+1)/l.length*100)+'%';$('#finSt').textContent=`Menyalin ${i+1} / ${l.length}…`}
+ $('#finSt').textContent=`Selesai! ${ok} file disalin${skip?`, ${skip} dilewati (sudah ada)`:''}${fail?`, ${fail} gagal`:''}.`;b.disabled=false};
+paintKeys();
+</script></body></html>
